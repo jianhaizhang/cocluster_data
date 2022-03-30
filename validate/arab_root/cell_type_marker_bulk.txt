@@ -1,0 +1,24 @@
+Tab1. Names of cell types		
+marker name	long name	short name
+ACOL	whole root	WRT
+APL	phloem and companion cells	PHLM_COMP
+CO2	developing cortex	DEV_CORT
+COBL9	hair cells	HAIR
+COR	mature cortex	MAT_CORT
+E30	mature endodermis	MAT_ENDO
+GL2	non-hair cell	NONHAIR
+PET111	columella	COLUMELLA
+S17	phloem pole pericycle	PERICYCLE
+S18	mature xylem pole	MAT_XYLEM
+S32	protophloem and metaphloem	PHLOEM
+S4	developing xylem	DEV_XYLEM
+SCR	endodermis and QC cells	ENDO_QC
+WER	LRC and non hair cells	LRC_NONHAIR
+WOL	stele	STELE
+WOX5	QC cells	QC
+Elong	elongation zone	ELONG
+Mat	maturation zone	MAT
+Mer	meristematic zone	MER
+Wrt	whole root	WRT
+CHX	cycloheximide treatment	CHX
+MOCK	cycloheximide mock	MOCK
