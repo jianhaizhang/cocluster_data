@@ -24,4 +24,12 @@ blk.all.mus.kdn[1:3, ]
 sc.mus.kdn <- sc_dat_mus_kdn('GSE107585_Mouse_kidney_single_cell_datamatrix.txt') 
 sc.mus.kdn[1:3, ]
 
+# Matching table.  
+source('../../function/df_match.R')
+match.mus.kdn <- df_match_mus_kdn()
+
+
+
+
+
 

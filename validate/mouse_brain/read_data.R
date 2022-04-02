@@ -18,7 +18,9 @@ sc.all.mus <- sc_dat_mus_brain(sc.pa= 'GSE147747_expr_raw_counts_table.tsv', met
 'GSE147747_meta_table.tsv') 
 sc.all.mus[1:3, 1:5]
 
-
+# Matching table.  
+source('../../function/df_match.R')
+match.mus.brain <- df_match_mus533()
 
 
 
