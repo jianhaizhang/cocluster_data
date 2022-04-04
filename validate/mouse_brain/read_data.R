@@ -6,17 +6,17 @@
 # Read mouse brain bulk data.
 source('../../function/bulk_dat.R')
 # blk.mus.brain
-blk.all.mus <- blk_dat_mus('bulk_mouse_brain.xls')
-blk.all.mus[1:3, ]
+blk.mus.brain <- blk_dat_mus('bulk_mouse_brain.xls')
+blk.mus.brain[1:3, ]
 
 # Download GSE147747_expr_raw_counts_table.tsv, GSE147747_meta_table.tsv at https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE147747. 
 
 # Read mouse brain single cell data.
 source('../../function/scell_dat.R')
 # sc.mus.brain
-sc.all.mus <- sc_dat_mus_brain(sc.pa= 'GSE147747_expr_raw_counts_table.tsv', meta.pa=   
+sc.mus.brain <- sc_dat_mus_brain(sc.pa= 'GSE147747_expr_raw_counts_table.tsv', meta.pa=   
 'GSE147747_meta_table.tsv') 
-sc.all.mus[1:3, 1:5]
+sc.mus.brain[1:3, 1:5]
 
 # Matching table.  
 source('../../function/df_match.R')

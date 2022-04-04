@@ -13,8 +13,8 @@ blk.all.mus.glom <- blk_dat_mus(pa='bulk_mouse_kidney_glom.xls')
 blk.all.mus.glom[1:3, ] 
 inter <- intersect(rownames(blk.all.mus.pct), rownames(blk.all.mus.glom)) 
 # blk.mus.kdn
-blk.all.mus.kdn <- cbind(blk.all.mus.glom[inter, ], blk.all.mus.pct[inter, ]) 
-blk.all.mus.kdn[1:3, ] 
+blk.mus.kdn <- cbind(blk.all.mus.glom[inter, ], blk.all.mus.pct[inter, ]) 
+blk.mus.kdn[1:3, ] 
 
 
 # Download GSE107585_Mouse_kidney_single_cell_datamatrix.txt at https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE107585. 
