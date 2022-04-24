@@ -1,3 +1,27 @@
+# Validate optimal parameter settings with 1 bulk and 1 single cell data sets of mouse brain.
+
+# Mouse brain bulk data.
+# The fastq files are downloaded at https://www.ncbi.nlm.nih.gov/bioproject/PRJNA725533 using sratoolkit (3.0.0) and trimmed using fastp (https://github.com/OpenGene/fastp). Then raw counts are obtained using systemPipeR (2.1.12).  
+
+# Read mouse brain bulk data.
+source('../../function/bulk_dat.R')
+# blk.mus.brain
+blk.mus.brain <- blk_dat_mus('bulk_mouse_brain.xls')
+blk.mus.brain[1:3, ]
+
+# Download GSE147747_expr_raw_counts_table.tsv, GSE147747_meta_table.tsv at https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE147747. 
+
+# Read mouse brain single cell data.
+source('../../function/scell_dat.R')
+# sc.mus.brain
+sc.mus.brain <- sc_dat_mus_brain(sc.pa= 'GSE147747_expr_raw_counts_table.tsv', meta.pa='GSE147747_meta_table.tsv') 
+sc.mus.brain[1:3, 1:5]
+
+# Matching table.  
+source('../../function/df_match.R')
+df.match.mus.brain <- df_match_mus533()
+
+
 # Loading packages.
 library(spatialHeatmap); library(BiocParallel); library(data.table)
 source('function/bulk_dat.R')
@@ -7,22 +31,8 @@ source('function/df_match.R')
 # Obtain reproducible results.
 set.seed(10)
 
-# Data paths.
-sc.pa.mus<- '~/bigdata/single_cell/data/mouse_brain/single_cell'
-blk.pa.mus533 <- '~/bigdata/single_cell/data/mouse_brain/PRJNA725533/result'
-
 # Matching table between bulk and single cells.
 df.match.mus.brain <- df_match_mus533()
-
-# Read data.
-
-# Bulk tissues of mouse brain.
-blk.mus.brain <- blk_dat_mus(pa=file.path(blk.pa.mus533, 'countDFeByg.xls'))
-blk.mus.brain[1:3, ]
-
-# Single cells of mouse kidney.
-sc.mus.brain <- sc_dat_mus_brain(sc.pa=file.path(sc.pa.mus, 'GSE147747_expr_raw_counts_table.tsv'), meta.pa=file.path(sc.pa.mus, 'GSE147747_meta_table.tsv'))
-sc.mus.brain[1:3, 1:5]
 
 # Inital filtering before normalization.
 blk.mus.brain.init <- filter_data(data=blk.mus.brain, pOA=c(0.05, 5), CV=c(0.05, 100)); dim(blk.mus.brain)
@@ -37,21 +47,21 @@ df.spd.opt[1:3, ]
 
 # Normalization by sum.factor.
 norm.fct.mus.brain <- norm_multi(dat.lis=mus.brain.lis.init, cpm=FALSE)
-saveRDS(norm.fct.mus.brain, file='validate_opt_res/norm.fct.mus.brain.rds')
-norm.fct.mus.brain <- readRDS('validate_opt_res/norm.fct.mus.brain.rds')
+saveRDS(norm.fct.mus.brain, file='../validate_opt_res/norm.fct.mus.brain.rds')
+norm.fct.mus.brain <- readRDS('../validate_opt_res/norm.fct.mus.brain.rds')
 
 # Secondary filtering 1 (fil1). In the optimization, "fil1", "fil2", and "fil3" are equally optimal, so only "fil1" is used.
 blk.fct.fil1.mus.brain <- filter_data(data=norm.fct.mus.brain$bulk, pOA=c(0.1, 1), CV=c(0.1, 100)); dim(blk.fct.fil1.mus.brain)
 
 dat.fct.fil1.mus.brain <- filter_cell(lis=list(sc.mus=norm.fct.mus.brain$sc.mus), bulk=blk.fct.fil1.mus.brain, gen.rm=NULL, min.cnt=1, p.in.cell=0.1, p.in.gen=0.01)
 
-saveRDS(dat.fct.fil1.mus.brain, file='validate_opt_res/dat.fct.fil1.mus.brain.rds')
-dat.fct.fil1.mus.brain <- readRDS('validate_opt_res/dat.fct.fil1.mus.brain.rds')
+saveRDS(dat.fct.fil1.mus.brain, file='../validate_opt_res/dat.fct.fil1.mus.brain.rds')
+dat.fct.fil1.mus.brain <- readRDS('../validate_opt_res/dat.fct.fil1.mus.brain.rds')
 
 # Coclustering.
-opt.mus.brain <- cocluster(bulk=dat.fct.fil1.mus.brain$bulk, cell=dat.fct.fil1.mus.brain$sc.mus, df.match=df.match.mus.brain, df.para=df.spd.opt, sc.dim.min=10, max.dim=50, sim=0.2, sim.p=0.8, dim=12, graph.meth='knn', dimred='PCA', sim.meth='spearman', return.all=FALSE, multi.core.par=MulticoreParam(workers=5), file='validate_opt_res/auc.dat.fct.fil1.mus.brain.pca.knn')
+opt.mus.brain <- cocluster(bulk=dat.fct.fil1.mus.brain$bulk, cell=dat.fct.fil1.mus.brain$sc.mus, df.match=df.match.mus.brain, df.para=df.spd.opt, sc.dim.min=10, max.dim=50, sim=0.2, sim.p=0.8, dim=12, graph.meth='knn', dimred='PCA', sim.meth='spearman', return.all=FALSE, multi.core.par=MulticoreParam(workers=5), file='../validate_opt_res/auc.dat.fct.fil1.mus.brain.pca.knn')
 
-opt.mus.brain <- readRDS('validate_opt_res/auc.dat.fct.fil1.mus.brain.pca.knn.rds')
+opt.mus.brain <- readRDS('../validate_opt_res/auc.dat.fct.fil1.mus.brain.pca.knn.rds')
 
 # Set auc = 0 for weak assignments.
 opt.mus.brain$auc[opt.mus.brain$true < 300 | opt.mus.brain$true < 500 | opt.mus.brain$auc < 0.5] <- 0
@@ -65,20 +75,20 @@ par.rdn.mus.brain[1:3, ]
 
 # Normalization by sum.factor + cpm.
 norm.cpm.mus.brain <- norm_multi(dat.lis=mus.brain.lis.init, cpm=TRUE)
-saveRDS(norm.cpm.mus.brain, file='validate_opt_res/norm.cpm.mus.brain.rds')
-norm.cpm.mus.brain <- readRDS('validate_opt_res/norm.cpm.mus.brain.rds')
+saveRDS(norm.cpm.mus.brain, file='../validate_opt_res/norm.cpm.mus.brain.rds')
+norm.cpm.mus.brain <- readRDS('../validate_opt_res/norm.cpm.mus.brain.rds')
 
 # Secondary filtering 3 (fil3).
 blk.cpm.fil3.mus.brain <- filter_data(data=norm.cpm.mus.brain$bulk, pOA=c(0.3, 1), CV=c(0.3, 100)); dim(blk.cpm.fil3.mus.brain)
 
 dat.cpm.fil3.mus.brain <- filter_cell(lis=list(sc.mus=norm.cpm.mus.brain$sc.mus), bulk=blk.cpm.fil3.mus.brain, gen.rm=NULL, min.cnt=1, p.in.cell=0.3, p.in.gen=0.1)
 
-saveRDS(dat.cpm.fil3.mus.brain, file='validate_opt_res/dat.cpm.fil3.mus.brain.rds')
+saveRDS(dat.cpm.fil3.mus.brain, file='../validate_opt_res/dat.cpm.fil3.mus.brain.rds')
 
 # Coclustering.
-rdn.mus.brain <- cocluster(bulk=dat.cpm.fil3.mus.brain$bulk, cell=dat.cpm.fil3.mus.brain$sc.mus, df.match=df.match.mus.brain, df.para=par.rdn.mus.brain, sc.dim.min=10, max.dim=50, sim=0.2, sim.p=0.8, dim=12, graph.meth='knn', dimred='PCA', sim.meth='spearman', return.all=FALSE, multi.core.par=MulticoreParam(workers=5), file='validate_opt_res/auc.dat.cpm.fil3.mus.brain.umap.rdn')
+rdn.mus.brain <- cocluster(bulk=dat.cpm.fil3.mus.brain$bulk, cell=dat.cpm.fil3.mus.brain$sc.mus, df.match=df.match.mus.brain, df.para=par.rdn.mus.brain, sc.dim.min=10, max.dim=50, sim=0.2, sim.p=0.8, dim=12, graph.meth='knn', dimred='PCA', sim.meth='spearman', return.all=FALSE, multi.core.par=MulticoreParam(workers=5), file='../validate_opt_res/auc.dat.cpm.fil3.mus.brain.umap.rdn')
 
-rdn.mus.brain <- readRDS('validate_opt_res/auc.dat.cpm.fil3.mus.brain.umap.rdn.rds')
+rdn.mus.brain <- readRDS('../validate_opt_res/auc.dat.cpm.fil3.mus.brain.umap.rdn.rds')
 
 # Set auc = 0 for weak assignments.
 rdn.mus.brain$auc[rdn.mus.brain$true < 300 | rdn.mus.brain$true < 500 | rdn.mus.brain$auc < 0.5] <- 0
