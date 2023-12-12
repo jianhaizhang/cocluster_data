@@ -48,7 +48,7 @@ mus.kdn.lis.init <- filter_cell(lis=list(sc.mus=sc.mus.kdn), bulk=blk.mus.kdn.in
 # Validate optimal settings.
 
 # Optimal settings.
-df.spd.opt <- read.table('df_spd_opt.txt', header=TRUE, row.name=1, sep='\t')
+df.spd.opt <- read.table('../df_spd_opt.txt', header=TRUE, row.name=1, sep='\t')
 df.spd.opt[1:3, ]
 
 # Normalization by sum.factor.

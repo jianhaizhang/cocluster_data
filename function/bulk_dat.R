@@ -1,6 +1,6 @@
 # Read bulk tissue data of Arabidopsis root.
 # Read bulk tissue data of Arabidopsis root.
-bulk_dat <- function(rds, cnt.path, meta.path, marker.blk.path, dev.zone=FALSE) {
+bulk_dat <- function(cnt.path, meta.path, marker.blk.path, dev.zone=FALSE, rds) {
   library(readr)
   if (file.exists(rds)) { bulk <- readRDS(rds); return(bulk) } 
   met <- read.table(meta.path, header=TRUE, sep=',')

@@ -42,7 +42,7 @@ arab.rt.lis.init <- filter_cell(lis=list(sc9=sc.arab.rt9, sc51=sc.arab.rt51), bu
 # Validate optimal settings with sc9.
 
 # Optimal settings.
-df.spd.opt <- read.table('df_spd_opt.txt', header=TRUE, row.name=1, sep='\t')
+df.spd.opt <- read.table('../df_spd_opt.txt', header=TRUE, row.name=1, sep='\t')
 
 # Normalization by sum.factor.
 norm.fct.arab.rt <- norm_multi(dat.lis=arab.rt.lis.init, cpm=FALSE)
